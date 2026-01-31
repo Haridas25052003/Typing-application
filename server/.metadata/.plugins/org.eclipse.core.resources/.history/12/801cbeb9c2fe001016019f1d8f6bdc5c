@@ -1,0 +1,10 @@
+package com.demo.model;
+
+public class TypingResult {
+
+	private int wpm;
+	private double accuracy;
+	private int errors;
+	
+	
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POST API Test</title>
+</head>
+<body>
+
+<button onclick="sendResult()">Send Result</button>
+
+<script>
+function sendResult() {
+    fetch("http://localhost:8090/result", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            wpm: 68,
+            accuracy: 91.2,
+            errors: 5
+        })
+    })
+    .then(response => response.text())
+    .then(data => alert(data))
+    .catch(error => console.error(error));
+}
+</script>
+
+</body>
+</html>
