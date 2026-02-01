@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>POST API Test</title>
+  <title>Typing Test</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<button onclick="sendResult()">Send Result</button>
+  <h1>Typing Speed Test</h1>
 
-<script>
-function sendResult() {
-    fetch("http://localhost:8090/result", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            wpm: 68,
-            accuracy: 91.2,
-            errors: 5
-        })
-    })
-    .then(response => response.text())
-    .then(data => alert(data))
-    .catch(error => console.error(error));
-}
-</script>
+  <p><strong>Time Left:</strong> <span id="timer">60</span> seconds</p>
 
+  <div id="text-box"></div>
+
+  <textarea id="typing-area" placeholder="Start typing here..."></textarea>
+
+  <div class="actions">
+    <button id="submit-btn">Submit Test</button>
+  </div>
+
+  <p id="result"></p>
+  <p id="final-result"></p>
+
+  <script src="script.js"></script>
 </body>
 </html>
