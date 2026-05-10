@@ -6,115 +6,121 @@
     <title>TypeMaster — Typing Speed Test</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<!-- Ambient background orbs -->
-<div class="bg-layer" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+<div class="page-bg">
+    <div class="noise"></div>
 </div>
 
 <div class="app">
 
-    <!-- ── Header ── -->
+    <!-- ══ HEADER ══ -->
     <header class="header">
         <div class="logo">
-            <span class="logo-icon">⌨</span>
-            <span class="logo-text">type<span class="hi">master</span></span>
+            <div class="logo-mark">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M8 9h.01M12 9h.01M16 9h.01M8 13h.01M12 13h.01M16 13h.01M8 17h4"/></svg>
+            </div>
+            <span class="logo-name">Type<span class="logo-accent">Master</span></span>
         </div>
-        <div class="pb-chip" id="pbChip" title="Personal Best for current settings">
-            <span class="pb-label">best</span>
-            <span class="pb-wpm" id="pbWpm">--</span>
+
+        <div class="header-center">
+            <div class="mode-tabs" id="modeTabs">
+                <button class="mode-tab active" data-mode="time" data-dur="30">30 sec</button>
+                <button class="mode-tab" data-mode="time" data-dur="60">1 min</button>
+                <button class="mode-tab" data-mode="time" data-dur="120">2 min</button>
+                <button class="mode-tab" data-mode="words" data-wc="25">25 words</button>
+                <button class="mode-tab" data-mode="words" data-wc="50">50 words</button>
+            </div>
+        </div>
+
+        <div class="pb-pill" id="pbPill" title="Personal best for current settings">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span id="pbVal">--</span>
             <span class="pb-unit">wpm</span>
         </div>
     </header>
 
-    <!-- ── Settings bar ── -->
-    <nav class="settings-bar" id="settingsBar" aria-label="Test settings">
+    <!-- ══ TOPIC SELECTOR ══ -->
+    <div class="topic-row" id="topicRow">
+        <div class="topic-scroll">
+            <button class="topic-chip active" data-topic="random">🎲 Random</button>
+            <button class="topic-chip" data-topic="technology">💻 Technology</button>
+            <button class="topic-chip" data-topic="nature">🌿 Nature</button>
+            <button class="topic-chip" data-topic="science">🔬 Science</button>
+            <button class="topic-chip" data-topic="history">📖 History</button>
+            <button class="topic-chip" data-topic="sports">⚽ Sports</button>
+            <button class="topic-chip" data-topic="business">💼 Business</button>
+            <button class="topic-chip" data-topic="motivation">💡 Motivation</button>
+            <button class="topic-chip" data-topic="health">🧘 Health</button>
+        </div>
+        <div class="diff-group">
+            <button class="diff-btn active" data-diff="easy">Easy</button>
+            <button class="diff-btn" data-diff="medium">Medium</button>
+            <button class="diff-btn" data-diff="hard">Hard</button>
+        </div>
+    </div>
 
-        <div class="settings-group">
-            <span class="sg-label">mode</span>
-            <div class="sg-btns" role="group" aria-label="Test mode">
-                <button class="s-btn active" data-mode="time"  aria-pressed="true">time</button>
-                <button class="s-btn"        data-mode="words" aria-pressed="false">words</button>
+    <!-- ══ TYPING CARD ══ -->
+    <div class="typing-card" id="typingCard">
+
+        <!-- Progress bar — top of card, no padding above -->
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width:100%"></div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-item">
+                <span class="stat-val wpm-val" id="sWpm">0</span>
+                <span class="stat-lbl">wpm</span>
+            </div>
+            <div class="stat-pipe"></div>
+            <div class="stat-item">
+                <span class="stat-val acc-val" id="sAcc">100</span>
+                <span class="stat-lbl">acc%</span>
+            </div>
+            <div class="stat-pipe"></div>
+            <div class="stat-item center-stat">
+                <span class="stat-val time-val" id="sTimer">30</span>
+                <span class="stat-lbl" id="sTimerLbl">sec</span>
+            </div>
+            <div class="stat-pipe"></div>
+            <div class="stat-item">
+                <span class="stat-val err-val" id="sErrors">0</span>
+                <span class="stat-lbl">errors</span>
             </div>
         </div>
 
-        <div class="s-sep"></div>
+        <!-- Typing area -->
+        <div class="text-zone" id="textZone">
 
-        <!-- Time options -->
-        <div class="settings-group" id="timeOpts" aria-label="Duration">
-            <div class="sg-btns" role="group">
-                <button class="s-btn"        data-time="15">15</button>
-                <button class="s-btn"        data-time="30">30</button>
-                <button class="s-btn active" data-time="60">60</button>
-                <button class="s-btn"        data-time="120">120</button>
-            </div>
-        </div>
-
-        <!-- Word count options (hidden by default) -->
-        <div class="settings-group hidden" id="wordOpts" aria-label="Word count">
-            <div class="sg-btns" role="group">
-                <button class="s-btn"        data-words="10">10</button>
-                <button class="s-btn active" data-words="25">25</button>
-                <button class="s-btn"        data-words="50">50</button>
-                <button class="s-btn"        data-words="100">100</button>
-            </div>
-        </div>
-
-        <div class="s-sep"></div>
-
-        <div class="settings-group">
-            <span class="sg-label">difficulty</span>
-            <div class="sg-btns" role="group" aria-label="Difficulty">
-                <button class="s-btn active" data-diff="easy"   aria-pressed="true">easy</button>
-                <button class="s-btn"        data-diff="medium" aria-pressed="false">medium</button>
-                <button class="s-btn"        data-diff="hard"   aria-pressed="false">hard</button>
-            </div>
-        </div>
-
-    </nav>
-
-    <!-- ── Typing Zone ── -->
-    <section class="typing-zone" id="typingZone" aria-label="Typing test area">
-
-        <!-- Live stats row -->
-        <div class="live-bar" id="liveBar">
-            <div class="l-stat">
-                <span class="l-val" id="lWpm">0</span>
-                <span class="l-lbl">wpm</span>
-            </div>
-            <div class="l-stat l-timer">
-                <span class="l-val accent" id="lTimer">60</span>
-                <span class="l-lbl" id="lTimerLabel">sec</span>
-            </div>
-            <div class="l-stat">
-                <span class="l-val" id="lAcc">100</span>
-                <span class="l-lbl">acc%</span>
-            </div>
-        </div>
-
-        <!-- Text display -->
-        <div class="text-wrap" id="textWrap">
             <div class="text-display" id="textDisplay">
-                <!-- Character spans injected by JS -->
+                <!-- word spans injected by JS -->
             </div>
-            <!-- Smooth caret -->
-            <div class="caret" id="caret" aria-hidden="true"></div>
+            <div class="caret" id="caret"></div>
 
-            <!-- Overlay shown before test starts -->
-            <div class="start-overlay" id="startOverlay">
+            <!-- Loading state -->
+            <div class="zone-overlay" id="loadingOverlay">
                 <div class="overlay-inner">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01M8 16h4"/></svg>
-                    <span id="overlayText">click here or press any key to start</span>
+                    <div class="spinner"></div>
+                    <span id="loadingMsg">Loading text…</span>
                 </div>
             </div>
+
+            <!-- Start prompt (shown before test begins) -->
+            <div class="zone-overlay start-overlay" id="startOverlay">
+                <div class="overlay-inner">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M8 9h.01M12 9h.01M16 9h.01M8 13h.01M12 13h.01M16 13h.01M8 17h4"/></svg>
+                    <span>Click here or press any key to start</span>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Hidden real input — captures keystrokes -->
+        <!-- Invisible capture input -->
         <input
                 type="text"
                 id="typingInput"
@@ -123,97 +129,114 @@
                 autocorrect="off"
                 autocapitalize="none"
                 spellcheck="false"
-                aria-label="Typing input"
                 tabindex="0"
+                aria-label="Typing input"
         >
 
-    </section>
+    </div><!-- /.typing-card -->
 
-    <!-- ── Action buttons ── -->
-    <div class="actions" id="actions">
-        <button class="action-btn" id="restartBtn" title="Restart — Tab + Enter">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-            restart
+    <!-- ══ CONTROLS ══ -->
+    <div class="controls" id="controls">
+        <button class="ctrl-btn" id="restartBtn" title="Restart (Tab+Enter)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            Restart
         </button>
-        <button class="action-btn" id="newTextBtn" title="Get new text">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            new text
+        <button class="ctrl-btn" id="newTextBtn" title="Get new text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            New Text
         </button>
     </div>
 
-    <!-- ── Results Screen ── -->
-    <div class="results" id="results" aria-live="polite" aria-label="Test results">
-
+    <!-- ══ RESULTS ══ -->
+    <div class="results" id="results">
         <div class="results-card">
 
-            <!-- Header row -->
-            <div class="rc-header">
-                <div class="grade" id="gradeEl">--</div>
+            <!-- Top row: grade + title + PB badge -->
+            <div class="rc-top">
+                <div class="grade-box" id="gradeBox">A</div>
                 <div class="rc-title-area">
-                    <h2 class="rc-title">test complete</h2>
-                    <p class="rc-feedback" id="feedbackEl">Keep it up!</p>
+                    <h2 class="rc-title">Test Complete</h2>
+                    <p class="rc-feedback" id="rcFeedback">Excellent work!</p>
                 </div>
-                <div class="pb-new hidden" id="pbNew">🏆 new personal best!</div>
+                <div class="pb-badge hidden" id="pbBadge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    New Personal Best!
+                </div>
             </div>
 
             <!-- Big numbers -->
-            <div class="big-stats">
-                <div class="big-stat">
-                    <div class="big-val" id="rWpm">0</div>
-                    <div class="big-lbl">wpm</div>
+            <div class="rc-main">
+                <div class="rc-big">
+                    <div class="rc-big-val" id="rWpm">0</div>
+                    <div class="rc-big-lbl">wpm</div>
                 </div>
-                <div class="big-sep"></div>
-                <div class="big-stat">
-                    <div class="big-val" id="rAcc">0%</div>
-                    <div class="big-lbl">accuracy</div>
+                <div class="rc-divider"></div>
+                <div class="rc-big">
+                    <div class="rc-big-val" id="rAcc">0<span style="font-size:0.55em">%</span></div>
+                    <div class="rc-big-lbl">accuracy</div>
                 </div>
+            </div>
+
+            <!-- Speed level meter -->
+            <div class="speed-meter">
+                <div class="speed-labels">
+                    <span>Beginner</span>
+                    <span>Average</span>
+                    <span>Fast</span>
+                    <span>Expert</span>
+                </div>
+                <div class="speed-track">
+                    <div class="speed-fill" id="speedFill"></div>
+                    <div class="speed-dot" id="speedDot"></div>
+                </div>
+                <div class="speed-level" id="speedLevel">Loading…</div>
             </div>
 
             <!-- Detail grid -->
-            <div class="detail-grid">
-                <div class="d-cell">
-                    <span class="d-lbl">raw wpm</span>
-                    <span class="d-val" id="rRaw">--</span>
+            <div class="rc-grid">
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Raw WPM</span>
+                    <span class="rc-cell-val" id="rRaw">--</span>
                 </div>
-                <div class="d-cell">
-                    <span class="d-lbl">errors</span>
-                    <span class="d-val err-col" id="rErrors">--</span>
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Errors</span>
+                    <span class="rc-cell-val err-text" id="rErrors">--</span>
                 </div>
-                <div class="d-cell">
-                    <span class="d-lbl">correct chars</span>
-                    <span class="d-val" id="rCorrect">--</span>
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Correct Chars</span>
+                    <span class="rc-cell-val" id="rCorrect">--</span>
                 </div>
-                <div class="d-cell">
-                    <span class="d-lbl">time</span>
-                    <span class="d-val" id="rTime">--</span>
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Time Taken</span>
+                    <span class="rc-cell-val" id="rTime">--</span>
                 </div>
-                <div class="d-cell">
-                    <span class="d-lbl">mode</span>
-                    <span class="d-val" id="rMode">--</span>
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Mode</span>
+                    <span class="rc-cell-val" id="rMode">--</span>
                 </div>
-                <div class="d-cell">
-                    <span class="d-lbl">difficulty</span>
-                    <span class="d-val" id="rDiff">--</span>
+                <div class="rc-cell">
+                    <span class="rc-cell-lbl">Topic</span>
+                    <span class="rc-cell-val" id="rTopic">--</span>
                 </div>
             </div>
 
-            <!-- CTA buttons -->
+            <!-- Actions -->
             <div class="rc-actions">
                 <button class="btn-primary" id="tryAgainBtn">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                    try again
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                    Try Again
                 </button>
-                <button class="btn-secondary" id="newTestBtn">new test</button>
+                <button class="btn-secondary" id="newTestBtn">New Test</button>
             </div>
 
         </div>
-    </div>
+    </div><!-- /.results -->
 
-    <!-- ── Footer ── -->
+    <!-- ══ FOOTER ══ -->
     <footer class="footer">
-        <span class="kbd-hint"><kbd>tab</kbd> + <kbd>enter</kbd> restart</span>
-        <span class="kbd-hint"><kbd>esc</kbd> reset</span>
-        <span class="kbd-hint">click text to focus</span>
+        <span class="hint"><kbd>Tab</kbd><kbd>Enter</kbd> restart</span>
+        <span class="hint"><kbd>Esc</kbd> reset</span>
+        <span class="hint">Click text area to focus</span>
     </footer>
 
 </div><!-- /.app -->
